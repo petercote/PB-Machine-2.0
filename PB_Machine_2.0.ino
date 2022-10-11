@@ -93,26 +93,27 @@ if (spinValue<=541 && spinValue>=481) {
 
 //BACKSPIN CONTROL
 //if spin potentiometer has backspin, then the top motor will run slower
-//if (spinValue<481)  {
-  //backSpinMap=map(spinValue, 0, 480, 70, 95); 
-  //backSpinPercent=backSpinMap/100; ////remaps the potentiometer values so that the bottom motor will run at 70-95 percent of the speed of the top motor  
-  //topMotorSpeed=(ballSpeed/4.011)*backSpinPercent;
-  //bottomMotorSpeed=map(ballSpeed, 0, 1023, 15, 255); //remaps bottom motor analog read range to analog write range with a speed minimum above zero
-//}
+if (spinValue<481)  {
+  backSpinMap=map(spinValue, 0, 480, 70, 95); 
+  backSpinPercent=backSpinMap/100.; ////remaps the potentiometer values so that the bottom motor will run at 70-95 percent of the speed of the top motor  
+  topMotorSpeed=(ballSpeed/4.011)*backSpinPercent;
+  bottomMotorSpeed=map(ballSpeed, 0, 1023, 15, 255); //remaps bottom motor analog read range to analog write range with a speed minimum above zero
+}
 
 //TOPSPIN CONTROL
 //if spin potentiometer has topspin, then the bottom motor will run slower
 if (spinValue>541) {
   topSpinMap=map(spinValue, 542, 1023, 95, 70); 
-  topSpinPercent=topSpinMap/100; //remaps the potentiometer values so that the bottom motor will run at 70-95 percent of the speed of the top motor  
-  bottomMotorSpeed=(ballSpeed/4.011)*(topSpinMap/100);
+  topSpinPercent=topSpinMap/100.; //remaps the potentiometer values so that the bottom motor will run at 70-95 percent of the speed of the top motor  
+  bottomMotorSpeed=(ballSpeed/4.011)*(topSpinPercent);
   topMotorSpeed=map(ballSpeed, 0, 1023, 15, 255); //remaps top motor analog read range to analog write range with a speed minimum above zero
 }
 
+
 //BALL VELOCITY
 //sends pwm signal to ball speed dc motor controller
-//analogWrite(topMotorDir1,topMotorSpeed);
-//analogWrite(bottomMotorDir1,bottomMotorSpeed);
+analogWrite(topMotorDir1,topMotorSpeed);
+analogWrite(bottomMotorDir1,bottomMotorSpeed);
 
 //LOFT UP CONTROL
 //while loft up button is pushed it will execute the below commands in a continuous loop
@@ -138,8 +139,7 @@ while (loftdwnStatus == LOW) {
   loftdwnStatus=digitalRead(loftdwnPin); //reads the status of the loft down button and defines the variable
 }
 
-feedSpeed=map(feedRate, 0, 1023, 30, 8000);
-
+feedSpeed=map(feedRate, 0, 1023, 20, 1600);
 
 if(currentMillis - previousStep >= feedSpeed){
   previousStep=currentMillis;
